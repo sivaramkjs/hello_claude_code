@@ -5,5 +5,5 @@ description: PR drafting rules for this project — confirming new branch names 
 
 # PR drafting rules
 
-- When creating a new branch, confirm the branch name with the user before running `git checkout -b`.
+- When creating a new branch, confirm the branch name with the user before creating it (e.g. via `git checkout -b` or `git switch -c`).
 - Before committing, confirm the commit message/description with the user rather than committing straight away.

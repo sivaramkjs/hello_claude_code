@@ -2,7 +2,7 @@ import threading
 
 import pytest
 
-from rate_limiter import SlidingWindowRateLimiter
+from rate_limiters.sliding_window_rate_limiter import SlidingWindowRateLimiter
 
 MAX_REQUESTS = 100
 WINDOW_SIZE = 1.0
