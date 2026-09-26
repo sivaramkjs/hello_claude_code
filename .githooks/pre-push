@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root"
+
+pylint_bin="$repo_root/.venv/bin/pylint"
+if [ ! -x "$pylint_bin" ]; then
+    pylint_bin="pylint"
+fi
+
+if [ -z "$(git ls-files '*.py')" ]; then
+    exit 0
+fi
+
+echo "Running pylint before push..."
+git ls-files -z '*.py' | xargs -0 "$pylint_bin"
