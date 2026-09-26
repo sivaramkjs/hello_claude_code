@@ -44,12 +44,12 @@ def test_concurrent_requests_do_not_exceed_max_requests(limiter):
     rejected_count = len(results) - allowed_count
     expected_rejected_count = thread_count - MAX_REQUESTS
 
-    assert allowed_count <= MAX_REQUESTS, (
-        f"expected at most {MAX_REQUESTS} allowed requests, got {allowed_count}"
-    )
-    assert rejected_count == expected_rejected_count, (
-        f"expected {expected_rejected_count} rejected requests, got {rejected_count}"
-    )
+    assert (
+        allowed_count <= MAX_REQUESTS
+    ), f"expected at most {MAX_REQUESTS} allowed requests, got {allowed_count}"
+    assert (
+        rejected_count == expected_rejected_count
+    ), f"expected {expected_rejected_count} rejected requests, got {rejected_count}"
 
 
 def test_burst_within_same_window_caps_allowed_requests_at_max(limiter):
@@ -61,19 +61,22 @@ def test_burst_within_same_window_caps_allowed_requests_at_max(limiter):
     blocked_count = len(results) - allowed_count
     expected_blocked_count = request_count - MAX_REQUESTS
 
-    assert allowed_count == MAX_REQUESTS, (
-        f"expected {MAX_REQUESTS} allowed requests, got {allowed_count}"
-    )
-    assert blocked_count == expected_blocked_count, (
-        f"expected {expected_blocked_count} blocked requests, got {blocked_count}"
-    )
+    assert (
+        allowed_count == MAX_REQUESTS
+    ), f"expected {MAX_REQUESTS} allowed requests, got {allowed_count}"
+    assert (
+        blocked_count == expected_blocked_count
+    ), f"expected {expected_blocked_count} blocked requests, got {blocked_count}"
 
 
 def test_burst_halfway_into_next_window_allows_only_half_max_after_previous_window_was_full(
     filled_limiter,
 ):
     halfway_into_window_two = WINDOW_START + WINDOW_SIZE + (WINDOW_SIZE / 2)
-    results = [filled_limiter.allow_request(halfway_into_window_two) for _ in range(MAX_REQUESTS)]
+    results = [
+        filled_limiter.allow_request(halfway_into_window_two)
+        for _ in range(MAX_REQUESTS)
+    ]
 
     allowed_count = results.count(True)
     blocked_count = len(results) - allowed_count
@@ -83,27 +86,29 @@ def test_burst_halfway_into_next_window_allows_only_half_max_after_previous_wind
     expected_allowed_count = MAX_REQUESTS // 2
     expected_blocked_count = MAX_REQUESTS - expected_allowed_count
 
-    assert allowed_count == expected_allowed_count, (
-        f"expected {expected_allowed_count} allowed requests, got {allowed_count}"
-    )
-    assert blocked_count == expected_blocked_count, (
-        f"expected {expected_blocked_count} blocked requests, got {blocked_count}"
-    )
+    assert (
+        allowed_count == expected_allowed_count
+    ), f"expected {expected_allowed_count} allowed requests, got {allowed_count}"
+    assert (
+        blocked_count == expected_blocked_count
+    ), f"expected {expected_blocked_count} blocked requests, got {blocked_count}"
 
 
 def test_requests_after_skipping_multiple_windows_reset_the_limit(filled_limiter):
     request_count = 150
     after_gap_now = WINDOW_START + 3.5
 
-    results = [filled_limiter.allow_request(after_gap_now) for _ in range(request_count)]
+    results = [
+        filled_limiter.allow_request(after_gap_now) for _ in range(request_count)
+    ]
 
     allowed_count = results.count(True)
     blocked_count = len(results) - allowed_count
     expected_blocked_count = request_count - MAX_REQUESTS
 
-    assert allowed_count == MAX_REQUESTS, (
-        f"expected {MAX_REQUESTS} allowed requests, got {allowed_count}"
-    )
-    assert blocked_count == expected_blocked_count, (
-        f"expected {expected_blocked_count} blocked requests, got {blocked_count}"
-    )
+    assert (
+        allowed_count == MAX_REQUESTS
+    ), f"expected {MAX_REQUESTS} allowed requests, got {allowed_count}"
+    assert (
+        blocked_count == expected_blocked_count
+    ), f"expected {expected_blocked_count} blocked requests, got {blocked_count}"

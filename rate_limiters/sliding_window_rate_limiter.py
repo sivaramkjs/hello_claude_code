@@ -22,7 +22,9 @@ class SlidingWindowRateLimiter:
         if self._current_window_start is None:
             self._current_window_start = window_start
 
-        elapsed_windows = round((window_start - self._current_window_start) / self.window_size)
+        elapsed_windows = round(
+            (window_start - self._current_window_start) / self.window_size
+        )
         if elapsed_windows >= 1:
             self._previous_count = self._current_count if elapsed_windows == 1 else 0
             self._current_counter = count()
@@ -30,7 +32,9 @@ class SlidingWindowRateLimiter:
             self._current_window_start = window_start
 
         elapsed_fraction = (now - window_start) / self.window_size
-        weighted_count = self._previous_count * (1 - elapsed_fraction) + self._current_count
+        weighted_count = (
+            self._previous_count * (1 - elapsed_fraction) + self._current_count
+        )
 
         if weighted_count < self.max_requests:
             self._current_count = next(self._current_counter) + 1

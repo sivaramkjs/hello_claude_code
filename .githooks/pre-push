@@ -4,13 +4,35 @@ set -euo pipefail
 repo_root="$(git rev-parse --show-toplevel)"
 cd "$repo_root"
 
-pylint_bin="$repo_root/.venv/bin/pylint"
-if [ ! -x "$pylint_bin" ]; then
-    pylint_bin="pylint"
-fi
+venv_bin="$repo_root/.venv/bin"
+
+tool_bin() {
+    local name="$1"
+    if [ -x "$venv_bin/$name" ]; then
+        echo "$venv_bin/$name"
+    else
+        echo "$name"
+    fi
+}
+
+autoflake_bin="$(tool_bin autoflake)"
+isort_bin="$(tool_bin isort)"
+black_bin="$(tool_bin black)"
+pylint_bin="$(tool_bin pylint)"
 
 if [ -z "$(git ls-files '*.py')" ]; then
     exit 0
+fi
+
+echo "Auto-fixing lint issues before push..."
+git ls-files -z '*.py' | xargs -0 "$autoflake_bin" --in-place --remove-all-unused-imports --remove-unused-variables
+git ls-files -z '*.py' | xargs -0 "$isort_bin" --quiet
+git ls-files -z '*.py' | xargs -0 "$black_bin" --quiet
+
+if ! git diff --quiet -- '*.py'; then
+    echo "Auto-fix changed the files below. Review and commit the changes, then push again:"
+    git diff --name-only -- '*.py'
+    exit 1
 fi
 
 echo "Running pylint before push..."
