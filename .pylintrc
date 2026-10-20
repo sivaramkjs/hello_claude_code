@@ -3,4 +3,10 @@ disable=
     missing-module-docstring,
     missing-function-docstring,
     too-few-public-methods,
-    redefined-outer-name
+    redefined-outer-name,
+    line-too-long,
+    unused-argument,
+    f-string-without-interpolation
+
+[BASIC]
+module-rgx=[a-z0-9_]+$
