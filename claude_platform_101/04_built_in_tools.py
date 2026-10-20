@@ -1,5 +1,6 @@
 import asyncio
-from clients.anthropic_async_client import anthropic_async_client, MODELS, Message
+
+from clients.anthropic_async_client import MODELS, Message, anthropic_async_client
 
 
 # server tools - runs on Anthropic cloud sandbox, no agent loop required and no pushing back tool results
@@ -8,8 +9,12 @@ async def web_search():
         model=MODELS[0],
         max_tokens=1024,
         tools=[{"type": "web_search_20260209", "name": "web_search"}],
-        messages=[Message(role="user",
-                          content="What is the latest OpenAI latest model release? Answer in one sentence")]
+        messages=[
+            Message(
+                role="user",
+                content="What is the latest OpenAI latest model release? Answer in one sentence",
+            )
+        ],
     )
 
     for block in response.content:
@@ -24,8 +29,12 @@ async def code_execution():
         model=MODELS[0],
         max_tokens=1024,
         tools=[{"type": "code_execution_20260120", "name": "code_execution"}],
-        messages=[Message(role="user",
-                          content="Calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]. Show python code")]
+        messages=[
+            Message(
+                role="user",
+                content="Calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]. Show python code",
+            )
+        ],
     )
 
     for block in response.content:

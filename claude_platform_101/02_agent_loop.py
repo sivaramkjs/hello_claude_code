@@ -1,6 +1,6 @@
 import asyncio
 
-from clients.anthropic_async_client import anthropic_async_client, Message, MODELS
+from clients.anthropic_async_client import MODELS, Message, anthropic_async_client
 
 tools = [
     {
@@ -44,11 +44,11 @@ tools = [
                 "cuisine": {
                     "type": "string",
                     "description": "The cuisine to find restaurants for",
-                }
+                },
             },
-            "required": ["city", 'cuisine'],
+            "required": ["city", "cuisine"],
         },
-    }
+    },
 ]
 
 
@@ -58,7 +58,9 @@ async def run_tool(name, tool_input):
     if name == "find_restaurants":
         return f"Which restaurants do you want? {tool_input['city']}"
     if name == "find_restaurants_by_city_and_cuisine":
-        return f"There are Italian and Indian restaurants nearby in {tool_input['city']}"
+        return (
+            f"There are Italian and Indian restaurants nearby in {tool_input['city']}"
+        )
     raise ValueError(f"Unknown tool: {name}")
 
 
@@ -71,13 +73,10 @@ async def agent_loop():
     while True:
         turn += 1
         response = await anthropic_async_client.messages.create(
-            model=MODELS[0],
-            max_tokens=1024,
-            tools=tools,
-            messages=messages
+            model=MODELS[0], max_tokens=1024, tools=tools, messages=messages
         )
 
-        print(f'--- turn: {turn} (stop_reason: {response.stop_reason}) ---')
+        print(f"--- turn: {turn} (stop_reason: {response.stop_reason}) ---")
         print(response.content)
 
         if response.stop_reason == "end_turn":
@@ -91,11 +90,13 @@ async def agent_loop():
             for block in response.content:
                 if block.type == "tool_use":
                     result = await run_tool(block.name, block.input)
-                    tool_results.append({
-                        "type": "tool_result",
-                        "tool_use_id": block.id,
-                        "content": result,
-                    })
+                    tool_results.append(
+                        {
+                            "type": "tool_result",
+                            "tool_use_id": block.id,
+                            "content": result,
+                        }
+                    )
             messages.append(Message(role="assistant", content=response.content))
             messages.append(Message(role="user", content=tool_results))
 

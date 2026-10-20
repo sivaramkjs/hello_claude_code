@@ -11,4 +11,6 @@ def run_sliding_window_rate_limiter_demo() -> None:
         now = simulated_start_time + (request_number - 1) * request_interval
         allowed = limiter.allow_request(now=now)
         outcome = "ALLOWED" if allowed else "REJECTED"
-        print(f"t={now - simulated_start_time:4.1f}s  request {request_number:2d}: {outcome}")
+        print(
+            f"t={now - simulated_start_time:4.1f}s  request {request_number:2d}: {outcome}"
+        )
