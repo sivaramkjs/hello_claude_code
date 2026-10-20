@@ -112,3 +112,34 @@ def test_requests_after_skipping_multiple_windows_reset_the_limit(filled_limiter
     assert (
         blocked_count == expected_blocked_count
     ), f"expected {expected_blocked_count} blocked requests, got {blocked_count}"
+
+
+@pytest.mark.parametrize("window_size", [0, -1.0])
+def test_non_positive_window_size_raises_value_error(window_size):
+    with pytest.raises(ValueError):
+        SlidingWindowRateLimiter(max_requests=MAX_REQUESTS, window_size=window_size)
+
+
+def test_request_with_timestamp_before_current_window_start_is_weighted_against_tracked_window(
+    filled_limiter,
+):
+    window_two_start = WINDOW_START + WINDOW_SIZE
+    # Trigger the rollover into window two; denied since the full previous
+    # window is still weighted at 100% right at the window boundary.
+    filled_limiter.allow_request(window_two_start)
+    # Build up current_count in window two to 90, via a timestamp near the end
+    # of the window so the previous window's weight is small enough to admit.
+    near_end_of_window_two = window_two_start + (WINDOW_SIZE - 0.01)
+    for _ in range(90):
+        filled_limiter.allow_request(near_end_of_window_two)
+
+    # A timestamp before window two's start (but still after window one's
+    # start) simulates a clock going backward after the rollover already
+    # happened. The weighting must stay anchored to the tracked current
+    # window's start, not to whatever window this out-of-order timestamp
+    # falls into, otherwise the previous window's full count gets
+    # under-weighted and the request is wrongly admitted.
+    backward_timestamp = window_two_start - 0.01
+    allowed = filled_limiter.allow_request(backward_timestamp)
+
+    assert not allowed, "expected request with backward timestamp to be denied"
