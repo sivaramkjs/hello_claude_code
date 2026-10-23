@@ -32,7 +32,7 @@ Run lessons from the project root: `PYTHONPATH=. python claude_platform_101/<fil
 4. **Server tools** (`04_built_in_tools.py`). Web search and code execution run on Anthropic's side, so there is no loop and no tool results to send back.
 
 Beyond the API:
-- **Rate limiting:** sliding window counter algorithm with a lock (`rate_limiters/`, demo in `sliding_window_rate_limiter_demo.py`).
+- **Rate limiting:** sliding window counter algorithm with a lock (`rate_limiters/`, demo in `rate_limiters/sliding_window_rate_limiter_demo.py`).
 - **Configuration:** secrets in `.env.local` loaded once through `python-dotenv`, one config module per concern.
 - **Reuse:** the client, model list and message type live in one module instead of being rebuilt per script.
 - **Tooling:** pylint config in `.pylintrc`, a pre-push hook and a CI workflow sharing it, and Claude Code skills and subagents for PR rules and tests.
