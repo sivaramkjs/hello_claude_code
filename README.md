@@ -38,6 +38,7 @@ Run lessons from the project root: `PYTHONPATH=. python claude_platform_101/<fil
 3. **Tool runner** (`03_tool_runner.py`). `@beta_async_tool` and `tool_runner` replace the hand-written loop; adaptive thinking and `effort`.
 4. **Server tools** (`04_built_in_tools.py`). Web search and code execution run on Anthropic's side, so there is no loop and no tool results to send back.
 5. **MCP connector** (`05_mcp.py`). Connect a remote MCP server (GitHub) through `mcp_servers` and an `mcp_toolset`, and allowlist tools with `default_config` and `configs`.
+6. **Context management** (`06_context_management.py`). Prompt caching, automatic with top-level `cache_control` or explicit with a `cache_control` breakpoint on a block, client-side compaction, and server-side compaction triggered by an input-token threshold.
 
 Beyond the API:
 - **Rate limiting:** sliding window counter algorithm with a lock (`rate_limiters/`, demo in `rate_limiters/sliding_window_rate_limiter_demo.py`).
