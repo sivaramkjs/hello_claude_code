@@ -1,4 +1,4 @@
-# hello_claude_code
+# Hello Claude Code
 
 A learning repo: building with the Claude API in Python, plus a few supporting exercises and Claude Code tooling.
 
@@ -26,10 +26,10 @@ echo "ANTHROPIC_API_KEY=your-key" > .env.local   # gitignored
 
 Run lessons from the project root: `PYTHONPATH=. python claude_platform_101/<file>.py`
 
-1. **`01_claude_api_call.py`: Messages API.** Async client, `system` prompts, `messages`, reading `usage` and content blocks, comparing models.
-2. **`02_agent_loop.py`: Manual agent loop.** Declare tool schemas, loop on `stop_reason == "tool_use"`, run the tool, return `tool_result` blocks, stop at `end_turn`.
-3. **`03_tool_runner.py`: Tool runner.** `@beta_async_tool` and `tool_runner` replace the hand-written loop; adaptive thinking and `effort`.
-4. **`04_built_in_tools.py`: Server tools.** Web search and code execution run on Anthropic's side, so there is no loop and no tool results to send back.
+1. **Messages API** (`01_claude_api_call.py`). Async client, `system` prompts, `messages`, reading `usage` and content blocks, comparing models.
+2. **Manual agent loop** (`02_agent_loop.py`). Declare tool schemas, loop on `stop_reason == "tool_use"`, run the tool, return `tool_result` blocks, stop at `end_turn`.
+3. **Tool runner** (`03_tool_runner.py`). `@beta_async_tool` and `tool_runner` replace the hand-written loop; adaptive thinking and `effort`.
+4. **Server tools** (`04_built_in_tools.py`). Web search and code execution run on Anthropic's side, so there is no loop and no tool results to send back.
 
 Beyond the API:
 - **Rate limiting:** sliding window counter algorithm with a lock (`rate_limiters/`, demo in `sliding_window_rate_limiter_demo.py`).
