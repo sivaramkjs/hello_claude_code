@@ -73,7 +73,7 @@ async def agent_loop():
     while True:
         turn += 1
         response = await anthropic_async_client.messages.create(
-            model=MODELS[0], max_tokens=1024, tools=tools, messages=messages
+            model=MODELS["sonnet"], max_tokens=1024, tools=tools, messages=messages
         )
 
         print(f"--- turn: {turn} (stop_reason: {response.stop_reason}) ---")

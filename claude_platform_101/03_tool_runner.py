@@ -41,7 +41,7 @@ async def get_forecast(location: str):
 
 async def tool_runner():
     runner = anthropic_async_client.beta.messages.tool_runner(
-        model=MODELS[0],
+        model=MODELS["sonnet"],
         max_tokens=10240,
         thinking={"type": "adaptive", "display": "summarized"},
         output_config={"effort": "high"},

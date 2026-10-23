@@ -6,7 +6,7 @@ from clients.anthropic_async_client import MODELS, Message, anthropic_async_clie
 # server tools - runs on Anthropic cloud sandbox, no agent loop required and no pushing back tool results
 async def web_search():
     response = await anthropic_async_client.messages.create(
-        model=MODELS[0],
+        model=MODELS["sonnet"],
         max_tokens=1024,
         tools=[{"type": "web_search_20260209", "name": "web_search"}],
         messages=[
@@ -26,7 +26,7 @@ async def web_search():
 
 async def code_execution():
     response = await anthropic_async_client.messages.create(
-        model=MODELS[0],
+        model=MODELS["sonnet"],
         max_tokens=1024,
         tools=[{"type": "code_execution_20260120", "name": "code_execution"}],
         messages=[

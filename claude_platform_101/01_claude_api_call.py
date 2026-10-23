@@ -9,7 +9,7 @@ SYSTEMS = {
 
 
 async def process_message(messages: list[Message]):
-    for model in MODELS:
+    for model in MODELS.values():
         response = await anthropic_async_client.messages.create(
             model=model, max_tokens=1024, system=SYSTEMS["reviewer"], messages=messages
         )

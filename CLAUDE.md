@@ -17,6 +17,7 @@
 
 - Names for classes, variables, and files must reflect their actual functionality — no generic labels like `Helper` or `main`. Prefer splitting logic into aptly-named files over dumping everything in `main.py`.
 - No `main.py`: each service's entry point is its app factory `create_<service>_app()` in `app/<service>_app.py`, run with `uvicorn app.<service>_app:create_<service>_app --factory`. Routes, middleware and wiring stay in their aptly-named files.
+- Name-keyed registration modules (lookups of registered entries, e.g. MCP servers) use a `_registry` suffix (e.g. `mcp_servers_registry.py`), not `_config`.
 
 ## Architecture
 
@@ -42,6 +43,7 @@
 
 - URLs, ports, timeouts and thresholds come from config, never hard-coded values.
 - Config lives in `app/config/`: plain module-level fields read with `os.environ.get(NAME, default)`, one file per concern (e.g. `http_client_config.py`). No catch-all config module.
+- A registry lives in the package that owns what it registers (e.g. the MCP servers registry in `clients/`), in a `registry.py` or `<thing>_registry.py` module; not in `config/` and not in a catch-all `registries/` folder. Don't create a separate config file for a single server; add its URL and token to the existing config file.
 
 ## Code style
 
@@ -54,6 +56,10 @@
 ## Sample data
 
 - Use made-up names (e.g. John, Doe) for names in any sample data.
+
+## Documentation
+
+- Before every commit and push, ask whether to update `README.md` for changes that affect the project layout or learning journey; don't edit it unprompted. Skip for trivial edits (typos, lint tweaks).
 
 ## Running
 
