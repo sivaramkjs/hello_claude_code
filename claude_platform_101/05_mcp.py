@@ -25,14 +25,16 @@ async def list_github_mcp_tools():
     response = await anthropic_async_client.beta.messages.create(
         model=MODELS["sonnet"],
         max_tokens=1024,
-        messages=[Message(role="user", content="List the exact tool names, one per line")],
+        messages=[
+            Message(role="user", content="List the exact tool names, one per line")
+        ],
         betas=["mcp-client-2025-11-20"],
         mcp_servers=[github_mcp_server],
         tools=[github_mcp_toolset],
     )
     # print(response)
 
-for block in response.content:
+    for block in response.content:
         if block.type == "text":
             print(block.text)
 
